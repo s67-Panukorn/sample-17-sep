@@ -1,42 +1,34 @@
 int[][] grid = {{1, 2, 1, 3}, {3, 4, 1, 2}, {2, 1, 3, 4}};
+int[][] data = {new int[4], new int[4], new int[4]};
 int rows = grid.length;
 int cols = grid[0].length;
 int w = width/cols;
 int h = height/rows;
-boolean working = false;
+int xPos = 0;
+int yPos = 0;
 
 void setup() {
     size(500, 500);
     strokeWeight(12);
     background(255);
     frameRate(60);
+    w = width/cols;
+    h = height/rows;
+    noLoop();
 }
 
 void draw(){
-    if(working){
-        main(grid);
-    }
-}
-
-void main(int[][] a){
-    int rows = a.length;
-    int cols = a[0].length;
-    int w = width/cols;
-    int h = height/rows;
-
     int i = 0;
     while (i < rows) {
-
         int j = 0;
         while (j < cols) {
-            
-            draw_lines(j*w+25,i*h+25,grid[i][j]);
-            println(i, j, " ", grid[i][j]);
+            draw_lines(j*w+25,i*h+25,data[i][j]);
+            println(i, j, " ", data[i][j]);
             j++;
         }
 
         i++;
-    }
+    } 
 }
 
 void draw_lines(int x , int y , int n ){
@@ -48,9 +40,9 @@ void draw_lines(int x , int y , int n ){
 }
 
 void mouseClicked(){
-     if(working == false){
-         working = true;
-     } else {
-         working = false;
-     }
+    xPos = floor(mouseX/w);
+    yPos = floor(mouseY/h);
+    data[yPos][xPos] = grid[yPos][xPos];
+    redraw();
+    
 }
