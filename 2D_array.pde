@@ -14,8 +14,6 @@ int show_time = 0;
 
 void setup() {
     size(500, 500);
-    strokeWeight(12);
-    background(255);
     frameRate(60);
     w = width/cols;
     h = height/rows;
@@ -24,6 +22,7 @@ void setup() {
 void draw(){
     background(255);
     draw_correctBG();
+    draw_grid();
     int i = 0;
     while (i < rows) {
         int j = 0;
@@ -45,7 +44,8 @@ void draw(){
 }
 
 void draw_lines(int x , int y , int n ){
-    
+    stroke(0);
+    strokeWeight(12);
     int i = 0;
     while(i < n){
         line(x + i*20,y,x +i*20,y+40);
@@ -58,16 +58,28 @@ void mouseClicked(){
     xPos = floor(mouseX/w)+1;
     yPos = floor(mouseY/h)+1;
     
-    if (first_select[0] == 0 && first_select[1] == 0){
+    if (first_select[0] == 0 && first_select[1] == 0 ){
+        if(data[yPos-1][xPos-1] == 0){
         first_select[0] = xPos;
         first_select[1] = yPos;
         data[first_select[1]-1][first_select[0]-1] = grid[first_select[1]-1][first_select[0]-1];
+        }
+        
     }
-    else if (first_select[0] != 0 && first_select[1] != 0 && second_select[0] == 0 && second_select[1] == 0){
-        second_select[0] = xPos;
-        second_select[1] = yPos;
-        data[second_select[1]-1][second_select[0]-1] = grid[second_select[1]-1][second_select[0]-1];
-        check_match(first_select, second_select);
+    else if (first_select[0] != 0 && first_select[1] != 0 && second_select[0] == 0 && second_select[1] == 0 ){
+        if(data[yPos-1][xPos-1] == 0){
+            second_select[0] = xPos;
+            second_select[1] = yPos;
+            if(first_select[0] != second_select[0] || first_select[1] != second_select[1]){
+                data[second_select[1]-1][second_select[0]-1] = grid[second_select[1]-1][second_select[0]-1];
+                check_match(first_select, second_select);
+            }
+            else{
+                second_select[0] = 0;
+                second_select[1] = 0;
+            }
+        }
+        
     }
     
     
@@ -79,14 +91,26 @@ void check_match(int[] first, int[] second){
         correct_bg = append(correct_bg,first_select[1]-1);
         correct_bg = append(correct_bg,second_select[0]-1);
         correct_bg = append(correct_bg,second_select[1]-1);
-        println(correct_bg.length);
         reset_select();
         
     }
-    else if (data[first[1]-1][first[0]-1] != data[second[1]-1][second[0]-1]){
-        println(data[first[1]-1][first[0]-1], data[second[1]-1][second[0]-1]);
+    else if (data[first[1]-1][first[0]-1] != data[second[1]-1][second[0]-1]){   
         show_time = millis();
         show_incorrect = true;
+    }
+}
+void draw_grid(){
+    stroke(150);
+    strokeWeight(1);
+    int i = 1;
+    while(i < rows){
+        int j = 1;
+        while(j < cols){
+            line(j*w,0,j*w,height);
+            line(0,i*h,width,i*h);
+            j++;
+        }
+        i++;
     }
 }
 
