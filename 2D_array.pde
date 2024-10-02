@@ -41,6 +41,11 @@ void draw(){
             show_incorrect = false;
         }
     }
+    if(is_victory()){
+        end();
+    }
+    
+    
 }
 
 void draw_lines(int x , int y , int n ){
@@ -55,6 +60,10 @@ void draw_lines(int x , int y , int n ){
 
 void mouseClicked(){
     
+    if(is_victory()){
+        exit();
+    }
+  
     xPos = floor(mouseX/w)+1;
     yPos = floor(mouseY/h)+1;
     
@@ -99,6 +108,7 @@ void check_match(int[] first, int[] second){
         show_incorrect = true;
     }
 }
+
 void draw_grid(){
     stroke(150);
     strokeWeight(1);
@@ -112,6 +122,35 @@ void draw_grid(){
         }
         i++;
     }
+}
+
+boolean is_victory(){
+    int i = 0;
+    while(i < rows){
+        int j = 0;
+        while(j<cols){
+            if(data[i][j] != grid[i][j]){
+                return false;
+            }
+            j++;
+        }
+        i++;
+    }
+    return true;
+}
+
+void end(){
+    background(255);
+    textAlign(CENTER);
+    strokeWeight(10);
+    textSize(75);
+    fill(#145efc);
+    text("Victory!!!",width/2,height/2+10);
+    strokeWeight(5);
+    textSize(20);
+    fill(#BBBBBB);
+    text("Click to exit",width/2,height-25);
+    
 }
 
 void reset_select(){
